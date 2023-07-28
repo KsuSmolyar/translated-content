@@ -131,58 +131,58 @@ translation_of: Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox
 
 ### Свойство `flex-grow`
 
-With the `flex-grow` property set to a positive integer, flex items can grow along the main axis from their `flex-basis`. This will cause the item to stretch and take up any available space on that axis, or a proportion of the available space if other items are allowed to grow too.
+Если для свойства`flex-grow` задано положительное целое число, flex-элементы могут расти вдоль главной оси от их `flex-basis`. Это приведет к тому, что элемент растянется и займет все доступное пространство на этой оси или часть доступного пространства, если другим элементам также разрешено расти.
 
-If we gave all of our items in the example above a `flex-grow` value of 1 then the available space in the flex container would be equally shared between our items and they would stretch to fill the container on the main axis.
+Если бы мы присвоили всем элементам в приведенном выше примере значение `flex-grow`, равное 1, тогда доступное пространство во flex-контейнере было бы поровну разделено между нашими элементами, и они бы растянулись, чтобы заполнить контейнер по главной оси.
 
-The flex-grow property can be used to distribute space in proportion. If we give our first item a `flex-grow` value of 2 and the other items a value of 1, 2 parts will be given to the first item (100px out of 200px in the case of the example above), 1 part each the other two (50px each out of the 200px total).
+Свойство flex-grow можно использовать для пропорционального распределения пространства. Если мы присвоим нашему первому элементу значение `flex-grow`, равное 2, а другим элементам значение, равное 1, то 2 части будут отданы первому элементу (100рх из 200рх в случае приведенного выше примера), и по 1 части каждому из двух остальных (по 50рх каждому из общих 200рх).
 
 ### Свойство `flex-shrink`
 
-Where the `flex-grow` property deals with adding space in the main axis, the `flex-shrink` property controls how it is taken away. If we do not have enough space in the container to lay out our items and `flex-shrink` is set to a positive integer the item can become smaller than the `flex-basis`. As with `flex-grow` different values can be assigned in order to cause one item to shrink faster than others — an item with a higher value set for `flex-shrink` will shrink faster than its siblings that have lower values.
+Если свойство `flex-grow` связано с добавлением пространства на главной оси,то свойство `flex-shrink` управляет тем, как оно удаляется. Если у нас недостаточно места в контейнере для размещения наших элементов, а для `flex-shrink` задано положительное целое число, элемент может стать меньше, чем его `flex-basis`. Как и в случае с `flex-grow`, могут быть назначены разные значения, чтобы заставить один элемент сжиматься быстрее, чем другие - элемент с более высоким значением, установленным для `flex-shrink`, будет сжиматься быстрее, чем его братья и сестры с более низкими значениями.
 
-The minimum size of the item will be taken into account while working out the actual amount of shrinkage that will happen, which means that flex-shrink has the potential to appear less consistent than flex-grow in behavior. We'll therefore take a more detailed look at how this algorithm works in the article Controlling Ratios of items along the main axis.
+Минимальный размер элемента будет учитываться при расчете фактической величины усадки(`shrinkage`), которая произойдет, а это означает, что flex-shrink может показаться менее последовательным в поведении, чем flex-grow. Поэтому мы более подробно рассмотрим, как работает этот алгоритм, в статье [Управление соотношением элементов вдоль главной оси](/ru/docs/Web/CSS/CSS_Flexible_Box_Layout/%D0%9A%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5_%D1%81%D0%BE%D0%BE%D1%82%D0%BD%D0%BE%D1%88%D0%B5%D0%BD%D0%B8%D1%8F_%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2_%D0%B2%D0%B4%D0%BE%D0%BB%D1%8C_%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D0%BE%D0%B9_%D0%BE%D1%81%D0%B8).
 
-> **Примечание:** Note that these values for `flex-grow` and `flex-shrink` are proportions. Typically if we had all of our items set to flex: `1 1 200px` and then wanted one item to grow at twice the rate, we would set that item to flex: `2 1 200px`. However you could use flex: `10 1 200px` and flex: `20 1 200px` if you wanted.
+> **Примечание:** Обратите внимание, что значения для `flex-grow` и `flex-shrink` являются пропорциями. Как правило, если бы мы установили для всех наших элементов значение flex: `1 1 200px`, а затем захотели, чтобы один элемент рос в два раза быстрее, мы бы установили для этого элемента значение flex: `2 1 200px`. Однако вы можете использовать flex: `10 1 200px` и flex: `20 1 200px`, если хотите.
 
 ### Краткая запись значений флекс свойств
 
-You will very rarely see the `flex-grow`, `flex-shrink`, and `flex-basis` properties used individually; instead they are combined into the {{cssxref("flex")}} shorthand. The `flex` shorthand allows you to set the three values in this order — `flex-grow`, `flex-shrink`, `flex-basis`.
+Вы очень редко увидите свойства `flex-grow`, `flex-shrink` и `flex-basis`, используемые по отдельности; вместо этого они объединяются в короткую запись {{cssxref("flex")}}. Короткая запись `flex` позволяет вам установить три значения в таком порядке — `flex-grow`, `flex-shrink`, `flex-basis`. 
 
-The live example below allows you to test out the different values of the flex shorthand; remember that the first value is `flex-grow`. Giving this a positive value means the item can grow. The second is `flex-shrink` — with a positive value the items can shrink, but only if their total values overflow the main axis. The final value is `flex-basis`; this is the value the items are using as their base value to grow and shrink from.
+Живой пример ниже позволяет вам протестировать различные значения сокращенной записи flex; помните, что первое значение — `flex-grow`. Присвоение этому свойству положительного значения означает, что элемент может расти. Второй — `flex-shrink` — при положительном значении элементы могут сжиматься, но только если их суммарные значения выходят за переделы главной оси. Последнее значение — `flex-basis`; это значение, которое элементы используют в качестве своего базового значения для увеличения и уменьшения.
 
 {{EmbedGHLiveSample("css-examples/flexbox/basics/flex-properties.html", '100%', 510)}}
 
-There are also some predefined shorthand values which cover most of the use cases. You will often see these used in tutorials, and in many cases these are all you will need to use. The predefined values are as follows:
+Есть также некоторые предварительно заданные сокращённые значения, которые охватывают большинство вариантов использования. Вы часто будете видеть, как они используются в учебных пособиях, и во многих случаях это все, что вам нужно будет использовать. Предварительно заданные значения следующие:
 
 - `flex: initial`
 - `flex: auto`
 - `flex: none`
 - `flex: <positive-number>`
 
-Setting `flex: initial` resets the item to the initial values of Flexbox. This is the same as `flex: 0 1 auto`. In this case the value of `flex-grow` is 0, so items will not grow larger than their `flex-basis` size. The value of `flex-shrink` is 1, so items can shrink if they need to rather than overflowing. The value of `flex-basis` is `auto`. Items will either use any size set on the item in the main dimension, or they will get their size from the content size.
+Установка `flex: initial` сбрасывает элемент к начальным значениям Flexbox. Это то же самое, что `flex: 0 1 auto`. В этом случае значение `flex-grow` равно 0, поэтому элементы не будут увеличиваться больше, чем их размер `flex-basis`. Значение `flex-shrink` равно 1, поэтому элементы могут сжиматься, если им нужно, вместо того, чтоб переполнять контейнер. Значение `flex-basis` равно `auto`. Элементы либо будут использовать любой размер, который установлен для элемента в основном измерении, либо они получат свой размер в зависомости от размера содержимого. 
 
-Using `flex: auto` is the same as using `flex: 1 1 auto`; everything is as with `flex:initial` but in this case the items can grow and fill the container as well as shrink if required.
+Использование `flex: auto` аналогично использованию `flex: 1 1 auto`; все как с `flex:initial`, но в этом случае элементы могут увеличиваться и заполнять контейнер, а также уменьшаться при необходимости.
 
-Using `flex: none` will create fully inflexible flex items. It is as if you wrote `flex: 0 0 auto`. The items cannot grow or shrink but will be laid out using flexbox with a `flex-basis` of `auto`.
+Использование `flex: none` создаст полностью негибкие flex-элементы. Это как если бы вы написали `flex: 0 0 auto`. Элементы не могут увеличиваться или уменьшаться, но будут размещены с использованием flexbox с `flex-basis`, равным `auto`.
 
-The shorthand you often see in tutorials is `flex: 1` or `flex: 2` and so on. This is as if you used `flex: 1 1 0`. The items can grow and shrink from a `flex-basis` of 0.
+Короткая запись, которую вы часто видите в учебных пособиях, это `flex: 1` или `flex: 2` и т.д. Это как если бы вы использовали `flex: 1 1 0`. Элементы могут увеличиваться и уменьшаться, начиная с `flex-basis`, равного 0.
 
-Try these shorthand values in the live example below.
+Попробуйте эти значения для сокращенной записи в живом примере ниже.
 
 {{EmbedGHLiveSample("css-examples/flexbox/basics/flex-shorthands.html", '100%', 510)}}
 
-## Alignment, justification and distribution of free space between items
+## Выравнивание и распределение свободного пространства между элементами
 
-A key feature of flexbox is the ability to align and justify items on the main- and cross-axes, and to distribute space between flex items.
+Ключевой особенностью flexbox является возможность выравнивать элементы по главной и поперечной осям, а также распределять пространство между flex-элементами.
 
 ### `align-items`
 
-The {{cssxref("align-items")}} property will align the items on the cross axis.
+Свойство {{cssxref("align-items")}} будет выравнивать элементы по поперечной оси.
 
-The initial value for this property is `stretch` and this is why flex items stretch to the height of the tallest one by default. They are in fact stretching to fill the flex container — the tallest item is defining the height of that.
+Начальное значение этого свойства — `stretch`, и именно поэтому flex-элементы по умолчанию растягиваются до высоты самого высокого из них. На самом деле они растягиваются, чтобы заполнить flex-контейнер — самый высокий элемент определяет его высоту. 
 
-You could instead set `align-items` to `flex-start` in order to make the items line up at the start of the flex container, `flex-end` to align them to the end, or `center` to align them in the centre. Try this in the live example — I have given the flex container a height in order that you can see how the items can be moved around inside the container. See what happens if you set the value of align-items to:
+Вместо этого вы можете установить для свойтва `align-items` значение `flex-start`, чтобы элементы выстроились в начале flex-контейнера, `flex-end`, чтобы выстроить их в конец flex-контейнера, или `center`, чтобы выровнять их по центру. Протестируйте это в примере ниже — flex-контейнеру задана высота, чтобы вы могли видеть, как элементы можно перемещать внутри контейнера. Посмотрите, что произойдет, если вы установите следующие значения для свойства align-items: 
 
 - `stretch`
 - `flex-start`
@@ -193,11 +193,11 @@ You could instead set `align-items` to `flex-start` in order to make the items l
 
 ### `justify-content`
 
-The {{cssxref("justify-content")}} property is used to align the items on the main axis, the direction in which `flex-direction` has set the flow. The initial value is `flex-start` which will line the items up at the start edge of the container, but you could also set the value to `flex-end` to line them up at the end, or `center` to line them up in the centre.
+Свойство {{cssxref("justify-content")}} используется для выравнивания элементов по главной оси, направление, которое установлено в свойстве `flex-direction`. Начальное значение `flex-start`, которое выстроит элементы в линию в начале контейнера, но вы также можете установить значение `flex-end`, чтобы выровнять их в конце, или `center`, чтобы выровнять их по центру.
 
-You can also use the value `space-between` to take all the spare space after the items have been laid out, and share it out evenly between the items so there will be an equal amount of space between each item. To cause an equal amount of space on the right and left of each item use the value `space-around`. With `space-around`, items have a half-size space on either end. Or, to cause items to have equal space around them use the value `space-evenly`. With `space-evenly`, items have a full-size space on either end.
+Вы также можете использовать значение `space-between`, чтобы занять все свободное пространство после того, как элементы были расположены, и равномерно распределить его между элементами, так чтобы между каждым элементом было равное пространство. Чтобы распределить одинаковое количество пространства справа и слева от каждого элемента, используйте значение `space-around`. Со значением `space-around` элементы имеют пространство половинного размера с обоих концов. Или, чтобы элементы имели одинаковое пространство вокруг себя, используйте значение `space-evenly`. Со значением `space-evenly` элементы имеют полноразмерное пространство с обоих концов.
 
-Try the following values of `justify-content` in the live example:
+Попробуйте следующие значения `justify-content` в примере:
 
 - `flex-start`
 - `flex-end`
@@ -208,8 +208,8 @@ Try the following values of `justify-content` in the live example:
 
 {{EmbedGHLiveSample("css-examples/flexbox/basics/justify-content.html", '100%', 380)}}
 
-In the article [Aligning Items in a Flex Container](/ru/docs/Web/CSS/CSS_Flexible_Box_Layout/Aligning_Items_in_a_Flex_Container) we will explore these properties in more depth, in order to have a better understanding of how they work. These simple examples however will be useful in the majority of use cases.
+В статье [Aligning Items in a Flex Container](/ru/docs/Web/CSS/CSS_Flexible_Box_Layout/Aligning_Items_in_a_Flex_Container) мы рассмотрим эти свойства более подробно, чтобы лучше понять, как они работают. Однако эти простые примеры будут полезны в большинстве случаев.
 
 ## Next steps
 
-After reading this article you should have an understanding of the basic features of Flexbox. In the next article we will look at [how this specification relates to other parts of CSS](/ru/docs/Web/CSS/CSS_Flexible_Box_Layout/Relationship_of_Flexbox_to_Other_Layout_Methods).
+Прочитав эту статью, вы должны иметь представление об основных возможностях Flexbox. В следующей статье мы рассмотрим [как эта спецификация связана с другими частями CSS](/ru/docs/Web/CSS/CSS_Flexible_Box_Layout/Relationship_of_Flexbox_to_Other_Layout_Methods).
