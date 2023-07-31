@@ -10,15 +10,15 @@ original_slug: >-
 
 {{CSSRef}}В данном руководстве, мы исследуем три свойства применяемые к flex элементам, которые позволяют нам контролировать размер и гибкость flex элементов по основной(main) оси. Полное понимание, как эти свойства работают, при увеличение и уменьшение элементов, есть ключ к мастерству flexbox.
 
-## A first look
+## Первый взгляд
 
-Our three properties control the following aspects of a flex item's flexibility:
+Наши три свойства определяют следующие аспекты гибкости flex-элемента:
 
-- `flex-grow`: How much of the positive free space does this item get?
-- `flex-shrink`: How much negative free space can be removed from this item?
-- `flex-basis`: What is the size of the item before growing and shrinking happens?
+- `flex-grow`: Сколько положительного свободного места занимает этот элемент?
+- `flex-shrink`: Сколько отрицательного свободного места можно удалить из этого элемента?
+- `flex-basis`: Каков размер элемента до того, как произойдет его увеличение или сжатие?
 
-The properties are usually expressed as the shorthand {{CSSxRef("flex")}} property. The following code would set the `flex-grow` property to `2`, `flex-shrink` to `1` and `flex-basis` to `auto`.
+Свойства обычно выражаются в виде сокращенного свойства {{Cssref("flex")}}. Следующий код установит свойству `flex-grow` значение `2`, `flex-shrink` значение `1` и `flex-basis` значение `auto`.
 
 ```css
 .item {
@@ -26,160 +26,160 @@ The properties are usually expressed as the shorthand {{CSSxRef("flex")}} proper
 }
 ```
 
-If you have read the article [Basic Concepts of Flexbox](/ru/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox), then you will have already had an introduction to the properties. Here we will explore them in depth in order that you can fully understand what the browser is doing when you use them.
+Если вы читали статью [Основные концепции Flexbox](/ru/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox), то у вас уже есть представление об этих свойствах. Здесь мы подробно рассмотрим их, чтобы вы могли полностью понять, что делает браузер, когда вы их используете.
 
-## Important concepts when working on the main axis
+## Важные понятия при работе на главной оси
 
-There are a few concepts worth digging into before looking at how the flex properties work to control ratios along the main axis. These relate to the _natural_ size of flex items before any growing or shrinking takes place, and to the concept of free space.
+Есть несколько концепций, с которыми стоит ознакомиться, прежде чем рассматривать, как свойства flex работают для управления соотношениями вдоль главной оси. Они относятся к _естественному_ размеру гибких изделий до того, как произойдет какое-либо увеличение или сжатие, а также к концепции свободного пространства. 
 
-### Flex item sizing
+### Определение размера flex-элемента
 
-In order to work out how much space there is available to lay out flex items, the browser needs to know how big the item is to start with. How is this worked out for items that don't have a width or a height applied using an absolute length unit?
+Чтобы определить, сколько места доступно для размещения flex-элемента, браузеру необходимо знать, какого размера элемент изначально. Как это работает для элементов, которые не имеют ширины или высоты, заданных с помощью единицы абсолютной длины?
 
-There is a concept in CSS of {{CSSxRef('width','min-content','#min-content')}} and {{CSSxRef('width','max-content','#max-content')}} — these keywords are [defined in the CSS Intrinsic and Extrinsic Sizing Specification](https://drafts.csswg.org/css-sizing-3/#width-height-keywords), and can be used in place of a [length unit](/ru/docs/Web/CSS/length).
+В CSS есть концепция {{CSSxRef('width','min-content','#min-content')}} и {{CSSxRef('width','max-content','#max-content')}} - эти ключевые слова [определены в спецификации внутренних и внешних размеров CSS](https://drafts.csswg.org/css-sizing-3/#width-height-keywords ) и может использоваться вместо [единицы измерения длины](/ru/docs/Web/CSS/length). 
 
-In the live example below for instance I have two paragraph elements that contain a string of text. The first paragraph has a width of `min-content`. In a browser that supports this keyword you should be able to see that the text has taken all of the soft wrapping opportunities available to it, becoming as small as it can be without overflowing. This then, is the `min-content` size of that string. Essentially, the longest word in the string is dictating the size.
+Например, в приведенном ниже примере у меня есть два элемента абзаца, которые содержат строку текста. Первый абзац имеет ширину `min-content`. В браузере, поддерживающем это ключевое слово, вы должны увидеть, что текст использовал все доступные ему возможности мягкого переноса (soft wrapping), став настолько маленьким, насколько это возможно, без переполнения. Таким образом, это размер `min-content` этой строки. По сути, самое длинное слово в строке определяет размер.
 
-The second paragraph has a value of `max-content` and so it does the opposite. It gets as big as it possibly can be, taking no soft-wrapping opportunities. It would overflow the box it is in if that container was too narrow.
+Второй абзац имеет значение `max-content`, и поэтому он делает обратное. Он становится настолько большим, насколько это возможно, не используя возможности мягкого переноса (soft wrapping). Он переполнил бы контейнер, в котором находится, если бы этот контейнер был слишком узким. 
 
 {{EmbedGHLiveSample("css-examples/flexbox/ratios/min-max-content.html", '100%', 750)}}
 
-If your browser does not yet support these keywords both paragraphs will be rendered as normal paragraphs in block flow; the below screenshots show the expected rendering.
+Если ваш браузер еще не поддерживает эти ключевые слова, оба абзаца будут отображаться как обычные абзацы в block flow; на приведенных ниже скриншотах показан ожидаемый рендеринг.
 
-![The first paragraph is wrapped to the longest word, the second stretched out so as to cause overflow.](ratios-size.png)
+![Первый абзац сворачивается до самого длинного слова, второй растягивается так, чтобы вызвать переполнение.](ratios-size.png)
 
-Remember this behaviour and what effects `min-content` and `max-content` have as we explore `flex-grow` and `flex-shrink` later in this article.
+Запомните это поведение и то, какие эффекты оказывают `min-content` и `max-content`, когда мы рассмотрим `flex-grow` и `flex-shrink` позже в этой статье. 
 
-### Positive and negative free space
+### Положительное и отрицательное свободное пространство
 
-To talk about these properties we need to understand the concept of **positive and negative free space**. When a flex container has positive free space, it has more space than is required to display the flex items inside the container. For example, if I have a 500 pixel-wide container, {{CSSxRef("flex-direction")}} is `row`, and I have three flex items each 100 pixels wide, then I have 200 pixels of positive free space, which could be distributed between the items if I wanted them to fill the container.
+Чтобы говорить об этих свойствах, нам нужно понять концепцию **положительного и отрицательного свободного пространства**. Когда во flex-контейнере имеется достаточное количество свободного места, в нем больше места, чем требуется для отображения адуч-элементов внутри контейнера. Например, если у меня есть контейнер шириной 500 пикселей, {{CSSxRef("flex-direction")}} - `row`, и у меня есть три гибких элемента шириной по 100 пикселей, тогда у меня есть 200 пикселей положительного свободного пространства, которое можно было бы распределить между элементами, если бы я хотел, чтобы они наполнили контейнер. 
 
-![Image showing space left over after items have been displayed.](basics7.png)
+![Изображение, показывающее пространство, оставшееся после отображения элементов.](basics7.png)
 
-We have negative free space when the natural size of the items adds up to larger than the available space in the flex container. If I have a 500 pixel-wide container like the one above, but the three flex items are each 200 pixels wide, the total space I need will be 600 pixels, so I have 100 pixels of negative free space. This could be removed from the items in order to make them fit the container.
+У нас есть отрицательное свободное пространство, когда естественный размер элементов в сумме превышает доступное пространство вo flex-контейнере. Если у меня есть контейнер шириной 500 пикселей, подобный приведенному выше, но три flex-элемента имеют ширину по 200 пикселей каждый, то общее пространство, которое мне нужно, составит 600 пикселей, так что у меня есть 100 пикселей отрицательного свободного пространства. Его можно было бы убрать с элементов, чтобы они поместились в контейнер. 
 
-![The items overflow the container](ratios1.png)
+![Элементы переполняют контейнер](ratios1.png)
 
-It is this distribution of positive free space and removal of negative free space that we need to understand in order to understand the flex properties.
+Именно это распределение положительного свободного пространства и удаление отрицательного свободного пространства нам нужно понять, чтобы понять свойства flex.
 
-In the following examples I am working with {{CSSxRef("flex-direction")}} set to row, therefore the size of items will always come from their width. We will be calculating the positive and negative free space created by comparing the total width of all the items with the container width. You could equally try out each example with `flex-direction: column`. The main axis would then be the column, and you would then need to compare the height of the items and that of the container they are in to work out the positive and negative free space.
+В следующих примерах я работаю с {{CSSxRef("flex-direction")}}, установленным в row, поэтому размер элементов всегда будет зависеть от их ширины. Мы будем вычислять положительное и отрицательное свободное пространство, созданное путем сравнения общей ширины всех элементов с шириной контейнера. Вы могли бы в равной степени исследовать каждый пример с помощью `flex-direction: column`. Тогда главной осью будет столбец, и вам нужно будет сравнить высоту элементов и высоту контейнера, в котором они находятся, чтобы определить положительное и отрицательное свободное пространство. 
 
-## The flex-basis property
+## Свойство flex-basis
 
-The {{CSSxRef("flex-basis")}} property specifies the initial size of the flex item before any space distribution happens. The initial value for this property is `auto`. If `flex-basis` is set to `auto` then to work out the initial size of the item the browser first checks if the main size of the item has an absolute size set. This would be the case if you had given your item a width of 200 pixels. In that case `200px` would be the `flex-basis` for this item.
+Свойство {{CSSxRef("flex-basis")}} определяет начальный размер flex-элемента до того, как произойдет какое-либо распределение пространства. Начальное значение для этого свойства - `auto`. Если для свойства `flex-basis` установлено значение `auto`, то для определения начального размера элемента браузер сначала проверяет, установлен ли основного размера элемента в абсолютных единицах. Это было бы в том случае, если бы вы присвоили своему элементу ширину 200 пикселей. В этом случае "200 пикселей" было бы `flex-basis` для этого элемента.
 
-If your item is instead auto-sized, then `auto` resolves to the size of its content. At this point your knowledge of `min-` and `max-content` sizing becomes useful, as flexbox will take the `max-content` size of the item as the `flex-basis`. The following live example can help to demonstrate this.
+Если вместо этого размер вашего элемента задан автоматически, то значение `auto` будет соответствовать размеру его содержимого. На этом этапе ваши знания о размерах `min-` и `max-content` становятся полезными, поскольку flexbox будет использовать размер элемента `max-content` в качестве `flex-basis`. Следующий пример может помочь продемонстрировать это.
 
-In this example I have created a series of inflexible boxes, with both `flex-grow` and `flex-shrink` set to `0`. Here we can see how the first item — which has an explicit width of 150 pixels set as the main size — takes a `flex-basis` of `150px`, whereas the other two items have no width and so are sized according to their content width.
+В этом примере я создал серию негибких блоков, для которых как `flex-grow` так и `flex-shrink` установлено значение `0`. Здесь мы можем видеть, как первый элемент, у которого в качестве основного размера задана явная ширина в 150 пикселей, свойство `flex-basis` принимает значение `150px`, в то время как два других элемента не имеют ширины и поэтому имеют размер в соответствии с шириной их содержимого.
 
 {{EmbedGHLiveSample("css-examples/flexbox/ratios/flex-basis.html", '100%', 500)}}
 
-In addition to the `auto` keyword, you can use the `content` keyword as the `flex-basis`. This will result in the `flex-basis` being taken from the content size even if there is a width set on the item. This is a newer keyword and has less browser support, however you can always get the same effect by using `auto` as the flex-basis and ensuring that your item does not have a width set, in order that it will be auto-sized.
+В дополнение к ключевому слову `auto` вы можете использовать ключевое слово `content` в качестве значений `flex-basis`. Это приведет к тому, что значение `flex-basis` будет взято из размера содержимого, даже если для элемента задана ширина. Это более новое ключевое слово, и оно имеет меньшую поддержку браузером, однако вы всегда можете получить тот же эффект, используя `auto` в качестве flex-basis и убедившись, что у вашего элемента не задана ширина, чтобы он автоматически изменял размер.
 
-If you want flexbox to completely ignore the size of the item when doing space distribution then set `flex-basis` to `0`. This essentially tells flexbox that all the space is up for grabs, and to share it out in proportion. We will see examples of this as we move on to look at `flex-grow`.
+Если вы хотите, чтобы flexbox полностью игнорировал размер элемента при распределении пространства, тогда установите для `flex-basis` значение `0`. По сути, это говорит flexbox о том, что все пространство доступно для захвата, и о необходимости распределять его пропорционально. Мы увидим примеры этого, когда перейдем к рассмотрению `flex-grow`.
 
-## The flex-grow property
+## Свойство flex-grow
 
-The {{CSSxRef("flex-grow")}} property specifies the **flex grow factor**, which determines how much the flex item will grow relative to the rest of the flex items in the flex container when the positive free space is distributed.
+Свойство {{CSSxRef("flex-grow")}} определяет **коэффициент flex grow**, который определяет, насколько flex-элемент будет увеличиваться относительно остальных flex-элементов во flex-контейнере при распределении положительного свободного пространства.
 
-If all of your items have the same `flex-grow` factor then space will be distributed evenly between all of them. If this is the situation that you want then typically you would use `1` as the value, however you could give them all a `flex-grow` of `88`, or `100`, or `1.2` if you like — it is a ratio. If the factor is the same for all, and there is positive free space in the flex container then it will be distributed equally to all.
+Если все элементы имеют одинаковый коэффициент `flex-grow`, то пространство будет распределено между ними равномерно. Если это та ситуация, которая вам нужна, то обычно вы бы использовали `1` в качестве значения, однако вы могли бы задать им всем `flex-grow` в размере `88`, или `100`, или `1,2`, если хотите - это соотношение. Если коэффициент одинаков для всех, и во flex-контейнере есть положительное свободное пространство, то оно будет распределено поровну между всеми.
 
-### Combining `flex-grow` and `flex-basis`
+### Сочетание `flex-grow` и `flex-basis`
 
-Things can get confusing in terms of how `flex-grow` and `flex-basis` interact. Let's consider the case of three flex items of differing content lengths and the following `flex` rules applied to them:
+Взаимодействие `flex-grow` и `flex-basis` может показаться сбивающим с толку. Давайте рассмотрим случай с тремя flex-элементами с содержимым разной длины и следующие `flex` правила, применяемые к ним:
 
 `flex: 1 1 auto;`
 
-In this case the `flex-basis` value is `auto` and the items don't have a width set, and so are auto-sized. This means that flexbox is looking at the `max-content` size of the items. After laying the items out we have some positive free space in the flex container, shown in this image as the hatched area:
+В этом случае значение `flex-basis` равно `auto`, и элементы не имеют заданной ширины, поэтому их размер определяется автоматически. Это означает, что flexbox смотрит на размер элементов `max-content`. После раскладывания элементов у нас остается некоторое количество свободного пространства в гибком контейнере, показанное на этом изображении в виде заштрихованной области:
 
-![Images shows the positive free space as a hatched area](ratios2.png)
+![Изображения показывают положительное свободное пространство в виде заштрихованной области](ratios2.png)
 
-We are working with a `flex-basis` equal to the content size so the available space to distribute is subtracted from the total available space (the width of the flex container), and the leftover space is then shared out equally among each item. Our bigger item ends up bigger because it started from a bigger size, even though it has the same amount of spare space assigned to it as the others:
+Мы работаем с `flex-basis`, равной размеру содержимого, поэтому доступное пространство для распределения вычитается из общего доступного пространства (ширина гибкого контейнера), а оставшееся пространство затем распределяется поровну между каждым элементом. Наш более крупный элемент в конечном итоге становится больше, потому что он начинался с большего размера, даже несмотря на то, что ему отведено столько же свободного места, сколько и остальным:
 
-![The positive space is distributed between items](ratios3.png)
+![Положительное пространство распределяется между элементами](ratios3.png)
 
-If what you actually want is three equally-sized items, even if they start out at different sizes, you should use this:
+Если то, что вам нужно, - это три элемента одинакового размера, даже если им изначально заданы разные размеры, вам следует использовать это:
 
 `flex: 1 1 0;`
 
-Here we are saying that the size of the item for the purposes of our space distribution calculation is `0` — all the space is up for grabs and as all of the items have the same `flex-grow` factor, they each get an equal amount of space distributed. The end result is three equal width, flexible items.
+Здесь мы говорим, что размер элемента для расчета распределения пространства равен `0` — все пространство доступно для захвата, и поскольку все элементы имеют одинаковый коэффициент `flex-grow`, каждому из них распределяется равный объем пространства. Конечным результатом являются три гибких элемента одинаковой ширины.
 
-Try changing the `flex-grow` factor from 1 to 0 in this live example to see the different behavior:
+Попробуйте изменить коэффициент `flex-grow` с 1 на 0 в этом примере, чтобы увидеть разницу в поведении:
 
 {{EmbedGHLiveSample("css-examples/flexbox/ratios/flex-grow.html", '100%', 520)}}
 
-### Giving items different flex-grow factors
+### Назначение элементам различных значений flex-grow
 
-Our understanding of how `flex-grow` works with `flex-basis` allows us to have further control over our individual item sizes by assigning items different `flex-grow` factors. If we keep our `flex-basis` at `0` so all of the space can be distributed, we could assign each of the three flex items a different `flex-grow` factor. In the example below I am using the following values:
+Наше понимание того, как `flex-grow` работает с `flex-basis`, позволяет нам дополнительно контролировать индивидуальные размеры наших элементов, назначая им различные коэффициенты `flex-grow`. Если мы сохраним свойство `flex-basis` со значением `0`, чтобы можно было распределить все пространство, мы могли бы присвоить каждому из трех flex-элементов разный коэффициент `flex-grow`. В приведенном ниже примере я использую следующие значения:
 
-- `1` for the first item.
-- `1` for the second item.
-- `2` for the third item.
+- `1` для первого элемента.
+- `1` для второго элемента.
+- `2` для третьего элемента.
 
-Working from a `flex-basis` of `0` this means that the available space is distributed as follows. We need to add up the flex grow factors, then divide the total amount of positive free space in the flex container by that number, which in this case is 4. We then share out the space according to the individual values — the first item gets one part, the second one part, the third two parts. This means that the third item is twice the size of the first and second items.
+Работая с `flex-basis` со значением `0`, мы распределяем доступное пространство следующим образом. Нам нужно сложить коэффициенты flex grow, затем разделить общее количество положительного свободного пространства во flex-контейнере на это число, которое в данном случае равно 4. Затем мы распределяем пространство в соответствии с индивидуальными значениями — первому элементу достается одна часть, второму - одна часть, третьему - две части. Это означает, что третий элемент в два раза больше первого и второго элементов.
 
 {{EmbedGHLiveSample("css-examples/flexbox/ratios/flex-grow-ratios.html", '100%', 520)}}
 
-Remember that you can use any positive value here. It is the ratio between one item and the others that matters. You can use large numbers, or decimals — it is up to you. To test that out change the values assigned in the above example to `.25`, `.25`, and `.50` — you should see the same result.
+Помните, что здесь вы можете использовать любое положительное значение. Важно соотношение между одним элементом и другими. Вы можете использовать большие числа или десятичные дроби — это зависит от вас. Чтобы проверить это, измените значения, присвоенные в приведенном выше примере, на `.25`, `.25` и `.50` — вы должны увидеть тот же результат.
 
-## The `flex-shrink` property
+## Свойство `flex-shrink`
 
-The {{CSSxRef("flex-shrink")}} property specifies the **flex shrink factor**, which determines how much the flex item will shrink relative to the rest of the flex items in the flex container when negative free space is distributed.
+Свойство {{CSSxRef("flex-shrink")}} определяет **коэффициент flex shrink**, который определяет, насколько flex-элемент уменьшится относительно остальных flex-элементов во flex-контейнере при распределении отрицательного свободного пространства.
 
-This property deals with situations where the browser calculates the `flex-basis` values of the flex items, and finds that they are too large to fit into the flex container. As long as `flex-shrink` has a positive value the items will shrink in order that they do not overflow the container.
+Это свойство относится к ситуациям, когда браузер вычисляет значения `flex-basis` flex-элементов и обнаруживает, что они слишком велики, чтобы поместиться во flex-контейнер. Пока `flex-shrink` имеет положительное значение, элементы будут сжиматься, чтобы они не переполняли контейнер.
 
-So where `flex-grow` deals with adding available space, `flex-shrink` manages taking away space to make boxes fit into their container without overflowing.
+Таким образом, там, где `flex-grow` занимается добавлением свободного пространства,  `flex-shrink` управляет освобождением места, чтобы блоки помещались в контейнер без переполнения.
 
-In the next live example I have three items in a flex container; I've given each a width of 200 pixels, and the container is 500 pixels wide. With `flex-shrink` set to `0` the items are not allowed to shrink and so they overflow the box.
+В следующем примере у меня есть три элемента во flex-контейнере; я присвоил каждому ширину 200 пикселей, а ширина контейнера составляет 500 пикселей. Если для параметра `flex-shrink` установлено значение `0`, элементы не могут сжиматься, и поэтому они переполняют контейнер.
 
 {{EmbedGHLiveSample("css-examples/flexbox/ratios/flex-shrink.html", '100%', 500)}}
 
-Change the `flex-shrink` value to `1` and you will see each item shrink by the same amount, in order that all of the items now fit in the box. They have become smaller than their initial width in order to do so.
+Измените значение `flex-shrink` на `1`, и вы увидите, что каждый элемент уменьшился на одинаковую величину, чтобы все элементы теперь поместились в контейнер. Для этого они стали меньше своей первоначальной ширины.
 
-### Combining `flex-shrink` and `flex-basis`
+### Сочетание `flex-shrink` и `flex-basis`
 
-You could say that `flex-shrink` works in pretty much the same way as `flex-grow`. However there are two reasons why it isn't _quite_ the same.
+Вы могли бы сказать, что `flex-shrink` работает практически так же, как `flex-grow`. Однако есть две причины, по которым это не _совсем_ одно и то же.
 
-While it is usually subtle, defined in the specification is one reason why `flex-shrink` isn't quite the same for negative space as `flex-grow` is for positive space:
+Хотя обычно это незаметно, определение в спецификации является одной из причин, по которой `flex-shrink` не совсем то же самое для отрицательного пространства, что `flex-grow` для положительного пространства:
 
-> "Note: The flex shrink factor is multiplied by the flex base size when distributing negative space. This distributes negative space in proportion to how much the item is able to shrink, so that e.g. a small item won't shrink to zero before a larger item has been noticeably reduced."
+> "Примечание: Коэффициент flex shrink умножается на размер flex base при распределении отрицательного пространства. Это распределяет отрицательное пространство пропорционально тому, насколько элемент способен уменьшаться, так что, например, маленький элемент не уменьшится до нуля до того, как будет заметно уменьшен более крупный элемент."
 
-The second reason is that flexbox prevents small items from shrinking to zero size during this removal of negative free space. The items will be floored at their `min-content` size — the size that they become if they take advantage of any soft wrapping opportunities available to them.
+Вторая причина заключается в том, что flexbox предотвращает сжатие мелких элементов до нулевого размера во время такого удаления отрицательного свободного пространства. Элементы будут сжаты в соответствии с их `min-content` - размером, который они приобретут, если воспользуются любыми доступными им возможностями мягкого переноса (soft wrapping).
 
-You can see this `min-content` flooring happen in the below example, where the `flex-basis` is resolving to the size of the content. If you change the width on the flex container — increasing it to 700px for example — and then reduce the flex item width, you can see that the first two items will wrap, however they will never become smaller than that `min-content` size. As the box gets smaller space is then just removed from the third item.
+Вы можете видеть, как это происходит с `min-content` в приведенном ниже примере, где `flex-basis` изменяется в соответствии с размером содержимого. Если вы измените ширину flex-контейнера — увеличив ее, например, до 700 пикселей — а затем уменьшите ширину flex-элемента, вы можете увидеть, что первые два элемента будут перенесены, однако они никогда не станут меньше размера `min-content`. По мере того, как контейнер становится меньше, пространство просто удаляется из третьего элемента.
 
 {{EmbedGHLiveSample("css-examples/flexbox/ratios/flex-shrink-min-content.html", '100%', 500)}}
 
-In practice the shrinking behaviour does tend to give you reasonable results. You don't usually want your content to disappear completely or for boxes to get smaller than their minimum content, so the above rules make sense in terms of sensible behaviour for content that needs to be shrunk in order to fit into a container.
+На практике поведение при сжатии, как правило, дает вам разумные результаты. Обычно вы не хотите, чтобы ваш контент полностью исчезал или чтобы блоки становились меньше, чем их минимальное содержимое, поэтому приведенные выше правила имеют смысл с точки зрения разумного поведения для контента, который необходимо уменьшить, чтобы он поместился в контейнер.
 
-### Giving items different `flex-shrink` factors
+### Назначение элементам различных значений `flex-shrink`
 
-In the same way as `flex-grow`, you can give flex-items different `flex-shrink` factors. This can help change the default behaviour if, for example, you want an item to shrink more or less rapidly than its siblings or not shrink at all.
+Точно так же, как с `flex-grow`, вы можете присвоить flex-элементам различные коэффициенты `flex-shrink`. Это может помочь изменить поведение по умолчанию, если, например, вы хотите, чтобы элемент сжимался более или менее быстро, чем его собратья, или не сжимался вообще.
 
-In the following live example the first item has a `flex-shrink` factor of 1, the second `0` (so it won't shrink at all), and the third `4`. The third item therefore shrinks more rapidly than the first. Play around with the different values — as for `flex-grow` you can use decimals or larger numbers here. Choose whatever makes most sense to you.
+В следующем примере первый элемент имеет коэффициент `flex-shrink`, равный 1, второй - `0` (так что он вообще не будет сжиматься), а третий - `4`. Таким образом, третий элемент сжимается быстрее, чем первый. Поиграйте с различными значениями — что касается `flex-grow`, то здесь вы можете использовать десятичные дроби или большие числа. Выбирайте то, что имеет для вас наибольший смысл.
 
 {{EmbedGHLiveSample("css-examples/flexbox/ratios/flex-shrink-ratios.html", '100%', 570)}}
 
-## Mastering sizing of flex items
+## Освоение определения размеров flex-элементов
 
-The key to really understanding how flex item sizing works is in understanding the number of things that come into play. Consider the following aspects, which we have already discussed in these guides:
+Ключом к настоящему пониманию того, как работает настройка размеров flex-элементов, является понимание ряда факторов, которые начинают действовать. Рассмотрим следующие аспекты, которые мы уже обсуждали в этих руководствах:
 
-### What sets the base size of the item?
+### Что определяет базовый размер элемента?
 
-1. Is `flex-basis` set to `auto`, and does the item have a width set? If so, the size will be based on that width.
-2. Is `flex-basis` set to `auto` or `content` (in a supporting browser)? If so, the size is based on the item size.
-3. Is `flex-basis` a length unit, but not zero? If so this is the size of the item.
-4. Is `flex-basis` set to `0`? if so then the item size is not taken into consideration for the space-sharing calculation.
+1. Установлено ли значение `flex-basis` на `auto`, и задана ли ширина элемента? Если это так, то размер будет зависеть от этой ширины. 
+2. Установлено ли значение `flex-basis` на `auto` или `content` (в поддерживающем браузере)? Если это так, то размер зависит от размера элемента. 
+3. Является ли значение свойства`flex-basis` единицей длины, но не нулем? Если это так, то это размер элемента.
+4. Установлено ли значение `flex-basis` на `0`? Если это так, то размер элемента не учитывается при расчете распределения пространства.
 
-### Do we have available space?
+### Есть ли у нас свободное место?
 
-Items can't grow with no positive free space, and they won't shrink unless there is negative free space.
+Элементы не могут увеличиваться при отсутствии положительного свободного пространства, и они не будут уменьшаться, если нет отрицательного свободного пространства.
 
-1. If we took all of the items and added up their widths (or heights if working in a column), is that total **less** than the total width (or height) of the container? If so, then you have positive free space and `flex-grow` comes into play.
-2. If we took all of the items and added up their widths (or heights if working in a column), is that total **more** than the total width (or height) of the container? If so, you have negative free space and `flex-shrink` comes into play.
+1. Если мы возьмем все элементы и сложим их ширину (или высоту, если работаем в столбце), будет ли это общее количество **меньше**, чем общая ширина (или высота) контейнера? Если это так, то у вас есть положительное свободное пространство, и в игру вступает свойство `flex-grow`. 
+2. Если мы возьмем все элементы и сложим их ширину (или высоту, если работаем в столбце), будет ли это общее количество **больше**, чем общая ширина (или высота) контейнера? Если это так, то у вас отрицательное свободное пространство, и в игру вступает свойство `flex-shrink`. 
 
-### Other ways to distribute space
+### Другие способы распределения пространства
 
-If you do not want space added to the items, remember that you can deal with free space between or around items using the alignment properties described in the guide to aligning items in a flex container. The {{CSSxRef("justify-content")}} property will enable the distribution of free space between or around items. You can also use auto margins on flex items to absorb space and create gaps between items.
+Если вы не хотите, чтобы к элементам добавлялось свободное пространство, помните, что вы можете использовать свободное пространство между элементами или вокруг них, используя свойства выравнивания, описанные в руководстве по выравниванию элементов во flex-контейнере. Свойство {{CSSxRef("justify-content")}} позволит распределять свободное пространство между элементами или вокруг них. Вы также можете использовать свойство margin со значением auto для flex-элементов, чтобы уменьшить пространство и создать промежутки(gap) между элементами.
 
-With all the flex tools at your disposal you will find that most tasks can be achieved, although it might take a little bit of experimentation at first.
+Имея в своем распоряжении все инструменты flex, вы обнаружите, что большинство задач выполнимы, хотя поначалу может потребоваться немного поэкспериментировать.
